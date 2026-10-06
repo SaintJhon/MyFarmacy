@@ -8,7 +8,7 @@ namespace SistemaFarmacia.Controllers
 {
     public class ProductosController : Controller
     {
-        // Lista estática vacía para ingresar los productos exclusivamente desde la web
+        
         private static List<Producto> listaProductos = new List<Producto>();
 
         public IActionResult Index()
