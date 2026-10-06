@@ -13,30 +13,25 @@ namespace SistemaFarmacia.Controllers
         [HttpPost]
         public IActionResult Login(string correo, string password)
         {
-            string rol = "";
-
-            if (correo == "admin@farmacia.com" && password == "1234")
+            // Validacion
+            if (correo == "admin@farmacia.com" && password == "123")
             {
-                rol = "Administrador";
+                HttpContext.Session.SetString("Rol", "Administrador");
+                return RedirectToAction("Index", "Productos");
             }
-            else if (correo == "empleado@farmacia.com" && password == "abcd")
+            else if (correo == "empleado@farmacia.com" && password == "123")
             {
-                rol = "Empleado";
+                HttpContext.Session.SetString("Rol", "Empleado");
+                return RedirectToAction("Index", "Productos");
             }
-            else if (correo == "cliente@farmacia.com" && password == "0000")
+            else if (correo == "cliente@farmacia.com" && password == "123")
             {
-                rol = "Cliente";
-            }
-            else
-            {
-                ViewBag.Error = "Correo o contrasenia incorrectos";
-                return View("Index");
+                HttpContext.Session.SetString("Rol", "Cliente");
+                return RedirectToAction("Index", "Productos");
             }
 
-            HttpContext.Session.SetString("RolUsuario", rol);
-            HttpContext.Session.SetString("CorreoUsuario", correo);
-
-            return RedirectToAction("Index", "Productos");
+            ViewBag.Error = "Datos incorrectos";
+            return View("Index");
         }
     }
 }
