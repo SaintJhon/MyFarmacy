@@ -1,0 +1,66 @@
+﻿@model SistemaFarmacia.DTOs.Sucursal.SucursalDTO
+
+@{
+    ViewData["Title"] = "Editar Sucursal";
+}
+
+<div class="container mt-4">
+
+    <h1>Editar Sucursal</h1>
+    <hr />
+
+    <div class="card shadow-sm">
+
+        <div class="card-header bg-success text-white">
+            Editar Sucursal
+        </div>
+
+        <div class="card-body">
+
+            <form asp-action="Edit" method="post">
+
+                <input type="hidden" asp-for="Id" />
+
+                <div class="mb-3">
+                    <label asp-for="Nombre" class="form-label">
+                        Nombre
+                    </label>
+
+                    <input asp-for="Nombre"
+                           class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Direccion" class="form-label">
+                        Dirección
+                    </label>
+
+                    <input asp-for="Direccion"
+                           class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Telefono" class="form-label">
+                        Teléfono
+                    </label>
+
+                    <input asp-for="Telefono"
+                           class="form-control" />
+                </div>
+
+                <button type="submit" class="btn btn-success">
+                    Guardar cambios
+                </button>
+
+                <a asp-action="Index"
+                   class="btn btn-secondary">
+                    Cancelar
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
