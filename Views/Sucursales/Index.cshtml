@@ -1,0 +1,83 @@
+﻿@model IEnumerable<SistemaFarmacia.DTOs.Sucursal.SucursalDTO>
+
+@{
+    ViewData["Title"] = "Sucursales";
+}
+
+<div class="container mt-4">
+
+    <h2>Gestión de Sucursales</h2>
+    <hr />
+
+    <div class="mb-3">
+        <a asp-action="Create" class="btn btn-success">
+            Nueva Sucursal
+        </a>
+    </div>
+
+    <div class="card shadow-sm">
+
+        <div class="card-header bg-dark text-white">
+            Lista de Sucursales
+        </div>
+
+        <div class="card-body">
+
+            <table class="table table-striped table-bordered">
+
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Dirección</th>
+                        <th>Teléfono</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @if (Model != null && Model.Any())
+                    {
+                        @foreach (var sucursal in Model)
+                        {
+                            <tr>
+                                <td>@sucursal.Id</td>
+                                <td>@sucursal.Nombre</td>
+                                <td>@sucursal.Direccion</td>
+                                <td>@sucursal.Telefono</td>
+
+                                <td>
+                                    <a asp-action="Edit"
+                                       asp-route-id="@sucursal.Id"
+                                       class="btn btn-primary btn-sm">
+                                        Editar
+                                    </a>
+
+                                    <a asp-action="Delete"
+                                       asp-route-id="@sucursal.Id"
+                                       class="btn btn-danger btn-sm"
+                                       onclick="return confirm('¿Desea eliminar esta sucursal?');">
+                                        Eliminar
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center text-muted">
+                                No hay sucursales registradas.
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+    </div>
+
+</div>

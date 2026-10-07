@@ -1,69 +1,110 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
-using SistemaFarmacia.Models;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using SistemaFarmacia.Services.Abstractions;
+using SistemaFarmacia.DTOs.Producto;
 
 namespace SistemaFarmacia.Controllers
 {
-    public class ProductosController : Controller
-    {
-        
-        private static List<Producto> listaProductos = new List<Producto>();
+	public class ProductosController : Controller
+	{
+		private readonly IProductosService _productosService;
 
-        public IActionResult Index()
-        {
-            string rol = HttpContext.Session.GetString("Rol");
+		public ProductosController(IProductosService productosService)
+		{
+			_productosService = productosService;
+		}
 
-            if (string.IsNullOrEmpty(rol))
-            {
-                return RedirectToAction("Index", "Home");
-            }
+		public async Task<IActionResult> Index(string? search)
+		{
+			string rol = HttpContext.Session.GetString("Rol");
 
-            ViewBag.Rol = rol;
-            return View(listaProductos);
-        }
+			if (string.IsNullOrEmpty(rol))
+			{
+				return RedirectToAction("Index", "Home");
+			}
 
-        [HttpPost]
-        public IActionResult Registrar(string codigo, string nombre, string descripcion)
-        {
-            string rol = HttpContext.Session.GetString("Rol");
+			var productos = await _productosService.SearchAsync(search);
 
-            if (rol != "Administrador" && rol != "Empleado")
-            {
-                return RedirectToAction("Index");
-            }
+			ViewBag.Rol = rol;
+			ViewBag.Search = search;
 
-            if (!string.IsNullOrEmpty(nombre))
-            {
-                int nuevoId = listaProductos.Count > 0 ? listaProductos.Max(p => p.Id) + 1 : 1;
-                listaProductos.Add(new Producto
-                {
-                    Id = nuevoId,
-                    Codigo = codigo ?? $"P00{nuevoId}",
-                    Nombre = nombre,
-                    Descripcion = descripcion
-                });
-            }
+			return View(productos);
+		}
 
-            return RedirectToAction("Index");
-        }
+		public IActionResult Create()
+		{
+			string rol = HttpContext.Session.GetString("Rol");
 
-        [HttpPost]
-        public IActionResult Eliminar(int id)
-        {
-            string rol = HttpContext.Session.GetString("Rol");
+			if (rol != "Administrador" && rol != "Empleado")
+			{
+				return RedirectToAction(nameof(Index));
+			}
 
-            if (rol == "Administrador")
-            {
-                var producto = listaProductos.FirstOrDefault(p => p.Id == id);
-                if (producto != null)
-                {
-                    listaProductos.Remove(producto);
-                }
-            }
+			return View();
+		}
 
-            return RedirectToAction("Index");
-        }
-    }
+		[HttpPost]
+		public async Task<IActionResult> Create(CreateProductoDTO dto)
+		{
+			string rol = HttpContext.Session.GetString("Rol");
+
+			if (rol != "Administrador" && rol != "Empleado")
+			{
+				return RedirectToAction(nameof(Index));
+			}
+
+			await _productosService.CreateAsync(dto);
+
+			return RedirectToAction(nameof(Index));
+		}
+
+		public async Task<IActionResult> Edit(int id)
+		{
+			string rol = HttpContext.Session.GetString("Rol");
+
+			if (rol != "Administrador" && rol != "Empleado")
+			{
+				return RedirectToAction(nameof(Index));
+			}
+
+			var producto = await _productosService.GetOneAsync(id);
+
+			if (producto == null)
+			{
+				return NotFound();
+			}
+
+			return View(producto);
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> Edit(ProductoDTO dto)
+		{
+			string rol = HttpContext.Session.GetString("Rol");
+
+			if (rol != "Administrador" && rol != "Empleado")
+			{
+				return RedirectToAction(nameof(Index));
+			}
+
+			await _productosService.UpdateAsync(dto);
+
+			return RedirectToAction(nameof(Index));
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> Delete(int id)
+		{
+			string rol = HttpContext.Session.GetString("Rol");
+
+			if (rol != "Administrador")
+			{
+				return RedirectToAction(nameof(Index));
+			}
+
+			await _productosService.DeleteAsync(id);
+
+			return RedirectToAction(nameof(Index));
+		}
+	}
 }

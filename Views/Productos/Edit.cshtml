@@ -1,0 +1,104 @@
+﻿@model SistemaFarmacia.DTOs.Producto.ProductoDTO
+
+@{
+    ViewData["Title"] = "Editar Producto";
+}
+
+<div class="container mt-4">
+
+    <h2>Sistema de Farmacia - Editar Producto</h2>
+    <hr />
+
+    <div class="card shadow-sm">
+
+        <div class="card-header bg-success text-white">
+            Editar Producto
+        </div>
+
+        <div class="card-body">
+
+            <form asp-action="Edit"
+                  asp-controller="Productos"
+                  method="post"
+                  class="row g-3">
+
+                <input type="hidden" asp-for="Id" />
+
+                <div class="col-md-6">
+                    <label asp-for="CodigoBarras" class="form-label">
+                        Código
+                    </label>
+
+                    <input asp-for="CodigoBarras"
+                           class="form-control" />
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="Nombre" class="form-label">
+                        Nombre
+                    </label>
+
+                    <input asp-for="Nombre"
+                           class="form-control" />
+                </div>
+
+                <div class="col-md-12">
+                    <label asp-for="Descripcion" class="form-label">
+                        Descripción
+                    </label>
+
+                    <textarea asp-for="Descripcion"
+                              class="form-control"></textarea>
+                </div>
+
+                <div class="col-md-4">
+                    <label asp-for="PrecioVenta" class="form-label">
+                        Precio
+                    </label>
+
+                    <input asp-for="PrecioVenta"
+                           type="number"
+                           step="0.01"
+                           class="form-control" />
+                </div>
+
+                <div class="col-md-4">
+                    <label asp-for="FechaVencimiento" class="form-label">
+                        Fecha de vencimiento
+                    </label>
+
+                    <input asp-for="FechaVencimiento"
+                           type="date"
+                           class="form-control" />
+                </div>
+
+                <div class="col-md-4">
+                    <label asp-for="IdProveedor" class="form-label">
+                        Id del proveedor
+                    </label>
+
+                    <input asp-for="IdProveedor"
+                           class="form-control" />
+                </div>
+
+                <div class="col-md-12">
+
+                    <button type="submit"
+                            class="btn btn-success">
+                        Guardar cambios
+                    </button>
+
+                    <a asp-action="Index"
+                       asp-controller="Productos"
+                       class="btn btn-secondary">
+                        Cancelar
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
