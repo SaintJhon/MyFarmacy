@@ -1,5 +1,10 @@
+using SistemaFarmacia.Services.Abstractions;
+using SistemaFarmacia.Services.Implementations;
+
+
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddSingleton<ISupplierService, SupplierService>();
 
 builder.Services.AddControllersWithViews();
 
